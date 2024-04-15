@@ -13,7 +13,7 @@ public class ImageManipulator {
      * @throws IOException
      */
     public static Img LoadImage(String path) throws IOException {
-        throw new UnsupportedOperationException();
+        return new Img(path);
     }
 
     /**
@@ -23,8 +23,7 @@ public class ImageManipulator {
      * @throws IOException
      */
     public static void SaveImage(Img image, String path) throws IOException {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        image.Save("image", path);
     }
 
     /**
@@ -35,8 +34,18 @@ public class ImageManipulator {
      * @return the image transformed to grayscale
      */
     public static Img ConvertToGrayScale(Img image) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        for(int i = 0; i < image.getWidth(); i++){
+            for(int j = 0; j < image.getHeight(); j++){
+                RGB rgb = image.GetRGB(i, j);
+                int red = rgb.GetRed();
+                int blue = rgb.GetBlue();
+                int green = rgb.GetGreen();
+                int average = (red+blue+green)/3;
+                RGB gray = new RGB(average, average, average);
+                image.SetRGB(i, j, gray);
+            }
+        }
+        return image;
     }
 
     /**
@@ -46,8 +55,17 @@ public class ImageManipulator {
      * @return image transformed to inverted image
      */
     public static Img InvertImage(Img image) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        for(int i = 0; i < image.getWidth(); i++){
+            for(int j = 0; j < image.getHeight(); j++){
+                RGB og = image.GetRGB(i, j);
+                int red = 255 - og.GetRed();
+                int green = 255 - og.GetGreen();
+                int blue = 255 - og.GetBlue();
+                RGB in = new RGB(red, green, blue);
+                image.SetRGB(i, j, in);
+            }
+        }
+        return image;
     }
 
     /**
