@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Static utility class that is responsible for transforming the images.
@@ -34,8 +36,8 @@ public class ImageManipulator {
      * @return the image transformed to grayscale
      */
     public static Img ConvertToGrayScale(Img image) {
-        for(int i = 0; i < image.getWidth(); i++){
-            for(int j = 0; j < image.getHeight(); j++){
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
                 RGB rgb = image.GetRGB(i, j);
                 int red = rgb.GetRed();
                 int blue = rgb.GetBlue();
@@ -55,8 +57,8 @@ public class ImageManipulator {
      * @return image transformed to inverted image
      */
     public static Img InvertImage(Img image) {
-        for(int i = 0; i < image.getWidth(); i++){
-            for(int j = 0; j < image.getHeight(); j++){
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
                 RGB og = image.GetRGB(i, j);
                 int red = 255 - og.GetRed();
                 int green = 255 - og.GetGreen();
@@ -73,13 +75,22 @@ public class ImageManipulator {
      * to get the new channel values:
      * r = .393r + .769g + .189b
      * g = .349r + .686g + .168b
-     * b = 272r + .534g + .131b
+     * b = .272r + .534g + .131b
      * @param image image to transform
      * @return image transformed to sepia
      */
     public static Img ConvertToSepia(Img image) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
+                RGB og = image.GetRGB(i, j);
+                int red = (int) ((.393 * og.GetRed()) + (.769 * og.GetGreen()) + (.189 * og.GetBlue()));
+                int green = (int) ((.349 * og.GetRed()) + (.686 * og.GetGreen()) + (.168 * og.GetBlue()));
+                int blue = (int) ((.272 * og.GetRed()) + (.534 * og.GetGreen()) + (.131 * og.GetBlue()));
+                RGB in = new RGB(red, green, blue);
+                image.SetRGB(i, j, in);
+            }
+        }
+        return image;
     }
 
     /**
@@ -92,8 +103,28 @@ public class ImageManipulator {
      * @return black/white stylized form of image
      */
     public static Img ConvertToBW(Img image) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        ArrayList<Double> lums = new ArrayList<Double>();
+        double median = 0;
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
+                RGB og = image.GetRGB(i, j);
+                double lum = Math.sqrt((.299 * (og.GetRed() * og.GetRed())) + (.587 * (og.GetGreen() * og.GetGreen())) + (.114 * (og.GetBlue() * og.GetBlue())));
+                lums.add(lum);
+                //RGB in = new RGB(red, green, blue);
+                //image.SetRGB(i, j, in);
+            }
+        }
+        Collections.sort(lums);
+        if(lums.size() % 2 == 1){
+            median = lums.get((lums.size() +1)/ 2 - 1);
+        }
+        else{
+            double lower = lums.get(lums.size()/2 - 1);
+            double upper = lums.get(lums.size()/2);
+            median = (lower + upper)/2.0;
+        }
+        return image;
+        //STILL WORKING ON THIS ONE
     }
 
     /**
