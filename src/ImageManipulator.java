@@ -123,8 +123,22 @@ public class ImageManipulator {
             double upper = lums.get(lums.size()/2);
             median = (lower + upper)/2.0;
         }
+        for(int k = 0; k < image.GetWidth(); k++){
+            for(int m = 0; m < image.GetHeight(); m++){
+                RGB pix = image.GetRGB(k, m);
+                double pixLum = Math.sqrt((.299 * (pix.GetRed() * pix.GetRed())) + (.587 * (pix.GetGreen() * pix.GetGreen())) + (.114 * pix.GetBlue() * pix.GetBlue()));
+                if(pixLum >= median){
+                    RGB white = new RGB(255, 255, 255);
+                    image.SetRGB(k, m, white);
+                }
+                else{
+                    RGB black = new RGB(0, 0, 0);
+                    image.SetRGB(k, m, black);
+                }
+            }
+        }
         return image;
-        //STILL WORKING ON THIS ONE
+
     }
 
     /**
@@ -132,7 +146,7 @@ public class ImageManipulator {
      * @param image image to transform
      * @return image rotated 90 degrees clockwise
      */
-    public  static Img RotateImage(Img image) {
+    public static Img RotateImage(Img image) {
         // Implement this method and remove the line below
         throw new UnsupportedOperationException();
     }
