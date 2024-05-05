@@ -147,8 +147,16 @@ public class ImageManipulator {
      * @return image rotated 90 degrees clockwise
      */
     public static Img RotateImage(Img image) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        int height1 = image.GetHeight();
+        int width1 = image.GetWidth();
+        Img rotated1 = new Img(height1, width1);
+        for(int i = 0; i < width1; i++){
+            for(int j = 0; j < height1; j++){
+                RGB og = image.GetRGB(i, j);
+                rotated1.SetRGB(height1 - 1 - j, i, og);
+            }
+        }
+        return rotated1;
     }
 
     /**
@@ -169,8 +177,37 @@ public class ImageManipulator {
      * @throws IOException
      */
     public static Img InstagramFilter(Img image) throws IOException {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        Img filtered = new Img(image.GetWidth(), image.GetHeight());
+        Img vignette = LoadImage("resources/halo.png");
+        Img grain = LoadImage("resources/decorative_grain.png");
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
+                RGB rgb = image.GetRGB(i, j);
+
+                //warm
+                int red = (int)(rgb.GetRed() * 1.2);
+                int green = rgb.GetGreen();
+                int blue = (int)(rgb.GetBlue() / 1.5);
+                //vignette
+                    //halo is 602x602
+                    //image is 980x550
+                //x*602/980, y*602/550
+                RGB vig = vignette.GetRGB(i*602/980, j*602/550);
+                red = (int)((.65*red) + (.35*vig.GetRed()));
+                green = (int)((.65*green) + (.35*vig.GetGreen()));
+                blue = (int)((.65*blue) + (.35*vig.GetBlue()));
+                //decorative grain
+                RGB gra = grain.GetRGB(i*602/980, j*602/550);
+                red = (int)((.95*red) + (.05*gra.GetRed()));
+                green = (int)((.95*green) + (.05*gra.GetGreen()));
+                blue = (int)((.95*blue) + (.05*gra.GetBlue()));
+
+
+                //set to filtered
+                filtered.SetRGB(i, j, new RGB(red, green, blue));
+            }
+        }
+        return filtered;
     }
 
     /**
@@ -182,8 +219,16 @@ public class ImageManipulator {
      * @return image with added hue
      */
     public static Img SetHue(Img image, int hue) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
+                RGB r = image.GetRGB(i, j);
+                HSL h = r.ConvertToHSL();
+                h.SetHue(hue);
+                RGB back = h.GetRGB();
+                image.SetRGB(i, j, back);
+            }
+        }
+        return image;
     }
 
     /**
@@ -195,8 +240,16 @@ public class ImageManipulator {
      * @return image with added hue
      */
     public static Img SetSaturation(Img image, double saturation) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
+                RGB r = image.GetRGB(i, j);
+                HSL h = r.ConvertToHSL();
+                h.SetSaturation(saturation);
+                RGB back = h.GetRGB();
+                image.SetRGB(i, j, back);
+            }
+        }
+        return image;
     }
 
     /**
@@ -208,7 +261,15 @@ public class ImageManipulator {
      * @return image with added hue
      */
     public static Img SetLightness(Img image, double lightness) {
-        // Implement this method and remove the line below
-        throw new UnsupportedOperationException();
+        for(int i = 0; i < image.GetWidth(); i++){
+            for(int j = 0; j < image.GetHeight(); j++){
+                RGB r = image.GetRGB(i, j);
+                HSL h = r.ConvertToHSL();
+                h.SetLightness(lightness);
+                RGB back = h.GetRGB();
+                image.SetRGB(i, j, back);
+            }
+        }
+        return image;
     }
 }
