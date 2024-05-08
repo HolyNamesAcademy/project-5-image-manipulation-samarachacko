@@ -25,7 +25,7 @@ public class ImageManipulator {
      * @throws IOException
      */
     public static void SaveImage(Img image, String path) throws IOException {
-        image.Save("image", path);
+        image.Save("png", path);
     }
 
     /**
@@ -185,26 +185,26 @@ public class ImageManipulator {
                 RGB rgb = image.GetRGB(i, j);
 
                 //warm
-                int red = (int)(rgb.GetRed() * 1.2);
-                int green = rgb.GetGreen();
-                int blue = (int)(rgb.GetBlue() / 1.5);
+                double red = (rgb.GetRed() * 1.2);
+                double green = rgb.GetGreen();
+                double blue = (rgb.GetBlue() / 1.5);
                 //vignette
                     //halo is 602x602
                     //image is 980x550
                 //x*602/980, y*602/550
                 RGB vig = vignette.GetRGB(i*602/980, j*602/550);
-                red = (int)((.65*red) + (.35*vig.GetRed()));
-                green = (int)((.65*green) + (.35*vig.GetGreen()));
-                blue = (int)((.65*blue) + (.35*vig.GetBlue()));
+                red = ((.65*red) + (.35*vig.GetRed()));
+                green = ((.65*green) + (.35*vig.GetGreen()));
+                blue = ((.65*blue) + (.35*vig.GetBlue()));
                 //decorative grain
                 RGB gra = grain.GetRGB(i*602/980, j*602/550);
-                red = (int)((.95*red) + (.05*gra.GetRed()));
-                green = (int)((.95*green) + (.05*gra.GetGreen()));
-                blue = (int)((.95*blue) + (.05*gra.GetBlue()));
+                int r = (int)((.95*red) + (.05*gra.GetRed()));
+                int g = (int)((.95*green) + (.05*gra.GetGreen()));
+                int b = (int)((.95*blue) + (.05*gra.GetBlue()));
 
 
                 //set to filtered
-                filtered.SetRGB(i, j, new RGB(red, green, blue));
+                filtered.SetRGB(i, j, new RGB(r, g, b));
             }
         }
         return filtered;
